@@ -1,57 +1,96 @@
-swiggy_delivery_time_prediction
-==============================
 
-Your project analyzes Swiggy delivery times to understand patterns, optimize efficiency, and improve predictions. It involves collecting real-time or historical delivery data, identifying key factors affecting delivery speed (e.g., distance, traffic, restaurant prep time), and using data analytics or machine learning to enhance accuracy. The goal is to provide insights for better customer experience and operational efficiency.
+# 📦 Swiggy Delivery Time Prediction 🚀  
 
-Project Organization
-------------
+## 📌 Overview  
+This project aims to **predict the estimated delivery time** for food orders based on multiple influencing factors, such as:  
+✔ **Rider details**  
+✔ **Vehicle information**  
+✔ **Weather conditions**  
+✔ **Traffic congestion**  
+✔ **Restaurant and customer locations**  
 
-    ├── LICENSE
-    ├── Makefile           <- Makefile with commands like `make data` or `make train`
-    ├── README.md          <- The top-level README for developers using this project.
-    ├── data
-    │   ├── external       <- Data from third party sources.
-    │   ├── interim        <- Intermediate data that has been transformed.
-    │   ├── processed      <- The final, canonical data sets for modeling.
-    │   └── raw            <- The original, immutable data dump.
-    │
-    ├── docs               <- A default Sphinx project; see sphinx-doc.org for details
-    │
-    ├── models             <- Trained and serialized models, model predictions, or model summaries
-    │
-    ├── notebooks          <- Jupyter notebooks. Naming convention is a number (for ordering),
-    │                         the creator's initials, and a short `-` delimited description, e.g.
-    │                         `1.0-jqp-initial-data-exploration`.
-    │
-    ├── references         <- Data dictionaries, manuals, and all other explanatory materials.
-    │
-    ├── reports            <- Generated analysis as HTML, PDF, LaTeX, etc.
-    │   └── figures        <- Generated graphics and figures to be used in reporting
-    │
-    ├── requirements.txt   <- The requirements file for reproducing the analysis environment, e.g.
-    │                         generated with `pip freeze > requirements.txt`
-    │
-    ├── setup.py           <- makes project pip installable (pip install -e .) so src can be imported
-    ├── src                <- Source code for use in this project.
-    │   ├── __init__.py    <- Makes src a Python module
-    │   │
-    │   ├── data           <- Scripts to download or generate data
-    │   │   └── make_dataset.py
-    │   │
-    │   ├── features       <- Scripts to turn raw data into features for modeling
-    │   │   └── build_features.py
-    │   │
-    │   ├── models         <- Scripts to train models and then use trained models to make
-    │   │   │                 predictions
-    │   │   ├── predict_model.py
-    │   │   └── train_model.py
-    │   │
-    │   └── visualization  <- Scripts to create exploratory and results oriented visualizations
-    │       └── visualize.py
-    │
-    └── tox.ini            <- tox file with settings for running tox; see tox.readthedocs.io
+## 🎯 Business Use Case  
+In the competitive **food delivery** market, **accurate Estimated Time of Arrival (ETA)** predictions are crucial for:  
+✔ **Enhancing Customer Satisfaction** – Reducing uncertainty in wait times  
+✔ **Optimizing Delivery Operations** – Efficient resource allocation for drivers  
+✔ **Reducing Operational Costs** – Better planning leads to fuel and time savings  
+✔ **Minimizing Order Cancellations** – Customers are less likely to cancel if they have reliable ETAs  
 
+## 🏗️ Tech Stack  
+### 🔹 Machine Learning & Backend  
+- **Python 3.11** (pandas, NumPy, scikit-learn)  
+- **MLflow** (Model tracking and experiment logging)  
+- **DVC (Data Version Control)**  
+- **Flask API** (For serving model predictions)  
 
---------
+### 🔹 Cloud & DevOps  
+- **AWS (EC2, S3, ECR, CodeDeploy, IAM, CloudWatch)**  
+- **GitHub Actions** (CI/CD automation)  
+- **Docker** (Containerization for deployment)  
 
-<p><small>Project based on the <a target="_blank" href="https://drivendata.github.io/cookiecutter-data-science/">cookiecutter data science project template</a>. #cookiecutterdatascience</small></p>
+### 🔹 CI/CD Pipeline  
+Our **Continuous Integration and Deployment (CI/CD)** process includes:  
+✔ **Code Checkout & Dependency Management**  
+✔ **Data & Model Versioning (DVC)**  
+✔ **Automated Unit & Performance Tests**  
+✔ **Building & Deploying Docker Image to AWS ECR**  
+✔ **Automated Deployment using AWS CodeDeploy**  
+
+## 🔄 CI/CD Workflow  
+The **GitHub Actions CI/CD pipeline** automates the process with the following steps:  
+1️⃣ **Code Checkout & Setup Python** (GitHub Actions)  
+2️⃣ **Install Dependencies** (`requirements-dev.txt`)  
+3️⃣ **DVC Pull** (Retrieve versioned data & models)  
+4️⃣ **Model Testing** (Test registry & performance)  
+5️⃣ **Model Promotion** (Deploy the best model)  
+6️⃣ **Docker Image Build & Push to AWS ECR**  
+7️⃣ **Deploy to AWS EC2 using AWS CodeDeploy**  
+
+## 🚀 Deployment Instructions  
+### 🔹 Manual Deployment  
+To manually deploy the service, run:  
+```bash
+# Set up AWS credentials
+aws configure set aws_access_key_id <ACCESS_KEY>
+aws configure set aws_secret_access_key <SECRET_KEY>
+
+# Build and push Docker image to AWS ECR
+docker build -t swiggy-delivery-time-prediction .
+docker tag swiggy-delivery-time-prediction:latest <AWS_ECR_REPO>:latest
+docker push <AWS_ECR_REPO>:latest
+
+# Deploy via AWS CodeDeploy
+aws deploy create-deployment \
+  --application-name swiggy-delivery-time-prediction \
+  --deployment-group-name swiggy-delivery-time-group \
+  --s3-location bucket=swiggy-delivery-time-deploy,key=deployment.zip,bundleType=zip
+```
+
+### 🔹 Running Locally  
+1️⃣ Clone the repository  
+```bash
+git clone https://github.com/your-repo/swiggy-delivery-time-prediction.git
+cd swiggy-delivery-time-prediction
+```
+2️⃣ Install dependencies  
+```bash
+pip install -r requirements.txt
+```
+3️⃣ Start Flask API  
+```bash
+python flask_app/app.py
+```
+
+### 🔹 Running Tests  
+```bash
+pytest tests/test_model_registry.py
+pytest tests/test_model_perf.py
+```
+
+## 📌 Contribution Guidelines  
+✔ **Fork the repository**  
+✔ **Create a feature branch** (`git checkout -b feature-name`)  
+✔ **Commit changes** (`git commit -m "Added feature"`)  
+✔ **Push to branch** (`git push origin feature-name`)  
+✔ **Open a Pull Request**  
+
